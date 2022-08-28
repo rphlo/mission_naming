@@ -33,18 +33,18 @@ nouns = ["COPPERTONE", "JOCKEY", "TIMBERWOLF", "SAWHORSE", "PANDA",
     "PROVIDENCE", "DEACON", "DRAGON", "SAHARA", "CHAMPION"]
 
 
-def int_to_roman(input):
-    if not isinstance(input, type(1)):
-        raise TypeError(f"Expected integer, got {type(input)}")
-    if not (0 < input < 4000):
+def int_to_roman(n):
+    if not isinstance(n, type(1)):
+        raise TypeError(f"Expected integer, got {type(n)}")
+    if not (0 < n < 4000):
         raise ValueError("Argument must be between 1 and 3999")
     ints = (1000, 900,  500, 400, 100,  90, 50,  40, 10,  9,   5,  4,   1)
     nums = ('M',  'CM', 'D', 'CD','C', 'XC','L','XL','X','IX','V','IV','I')
     result = []
     for i in range(len(ints)):
-        count = int(input / ints[i])
+        count = int(n / ints[i])
         result.append(nums[i] * count)
-        input -= ints[i] * count
+        n -= ints[i] * count
     return ''.join(result)
 
 
@@ -71,20 +71,24 @@ def codename_by_state(state):
     return ((state & 0xfffff) | s<<20), f"{adjvs[i]} {nouns[j]}"
 
 
-def generate(n=None, /, *, seed=0):
-    if n == None:
-        n = random.randrange(4028)
+def generate( *, index=None, seed=0):
+    if index is None:
+        index = random.randrange(4028)
     if not isinstance(seed, type(1)):
         raise TypeError(f"Expected seed to be integer, got {type(input)}")
-    if n < 0:
-        raise ValueError('n must be positive')
+    if not isinstance(index, type(1)):
+        raise TypeError(f"index is expected to be an integer, got {type(input)}")
+    if index < 0:
+        raise ValueError('index must be positive')
     hash = hash32(seed)
-    loop_count = (n // 4028) + 1
+    loop_count = (index // 4028) + 1
     if loop_count > 1:
-        n = n % 4028
-        for i in range(loop_count):
+        index = index % 4028
+        if loop_count >= 4000:
+            raise ValueError(f"index is must be less than 16107972")
+        for _ in range(loop_count):
             seed = hash32(hash)        
-    for i in range(n+1):
+    for _ in range(index + 1):
         hash, buf = codename_by_state(hash)
     
     codename = buf
@@ -94,4 +98,4 @@ def generate(n=None, /, *, seed=0):
 
 
 if __name__ == '__main__':
-    print(generate())
+    print(generate(index=16107972))
