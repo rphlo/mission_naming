@@ -19,7 +19,7 @@ Generate random mission codenames
     'BLUE MARKSMAN'
     >>> mission_naming.generate(index=2, seed=3256) # Generate a name given an index different random seed
     'LEAD STARDUST'
-    >>> mission_naming.generate(index=2, seed=3) # Same name is returned for same index and same random seed
+    >>> mission_naming.generate(index=2, seed=3256) # Same name is returned for same index and same random seed
     'LEAD STARDUST'
     >>> mission_naming.generate(index=10000) # only 4028 random unique names can be generated, if index is > 4028 a mission number is suffixed
     'FROZEN SUNDANCE III'
